@@ -38,3 +38,4 @@ for item in keys:
     if value == '':
         value = "NA"
     print item + ": \t" + value
+
