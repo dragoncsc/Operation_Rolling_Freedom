@@ -7,12 +7,10 @@ import requests
 from apikey import propublicakey
 from dbconfig import *
 
-def get_reps_info():
+def get_reps_info(chamber):
     base_url = "https://api.propublica.org/congress/v1/"
 
     congress_number = "115"
-
-    chamber = "senate"
 
     all_mem_url = congress_number +"/"+chamber+"/members.json"
 
@@ -24,7 +22,7 @@ def get_reps_info():
     return r
 
 
-def jsonify_reps( r ):
+def jsonify_reps( r , chamber ):
     raw_dict = r.json()
 
     data_dict = None
@@ -37,8 +35,6 @@ def jsonify_reps( r ):
 
     #Initalize cause im a basic betch
     members = [None]*len(members_list)
-
-    chamber = "senate"
 
     for x in xrange(len(members_list)):
         member = members_list[x]
@@ -54,8 +50,8 @@ def jsonify_reps( r ):
 
     return members
 
-def load_members_db():
-    members = jsonify_reps( get_reps_info() )
+def load_members_db(chamber):
+    members = jsonify_reps( get_reps_info(chamber) , chamber )
 
     create_tables()
 
@@ -69,17 +65,5 @@ def load_members_db():
         print member[5]
         print '\n\n'
 
-load_members_db()
-
-
-
-
-
-
-
-
-
-
-
-
-
+load_members_db("senate")
+load_members_db("house")
